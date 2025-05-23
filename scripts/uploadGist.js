@@ -3,13 +3,14 @@ const ethers = require("ethers");
 require("dotenv").config();
 
 const makeRequestSepolia = async () => {
-  // hardcoded for SEPOLIA_RPC_URL
 
-  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
-  const donId = "fun-ethereum-sepolia-1";
-  const rpcUrl = process.env.SEPOLIA_RPC_URL;
   const secrets = { apikey: process.env.SUPABASE_API_KEY };
 
+  // hardcoded for Ethereum Sepolia
+  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
+  const linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
+  const donId = "fun-ethereum-sepolia-1";
+  const rpcUrl = process.env.SEPOLIA_RPC_URL;
   // Initialize ethers signer and provider to interact with the contracts onchain
   const privateKey = process.env.EVM_PRIVATE_KEY;
   if (!privateKey)

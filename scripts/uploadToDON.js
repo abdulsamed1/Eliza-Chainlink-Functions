@@ -22,14 +22,15 @@ const makeRequestSepolia = async () => {
     );
   }
 
-  // hardcoded for SEPOLIA_RPC_URL
-  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
-  const donId = "fun-ethereum-sepolia-1";
-  const rpcUrl = process.env.SEPOLIA_RPC_URL; // fetch Sepolia RPC URL
 
+  // hardcoded for Ethereum Sepolia
+  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
+  const linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
+  const donId = "fun-ethereum-sepolia-1";
+  const rpcUrl = process.env.SEPOLIA_RPC_URL;
   const gatewayUrls = [
-    `https://01.functions-gateway.${donId}.chain.link/`,
-    `https://02.functions-gateway.${donId}.chain.link/`,
+    "https://01.functions-gateway.testnet.chain.link/",
+    "https://02.functions-gateway.testnet.chain.link/",
   ];
   const slotIdNumber = 0;
   const expirationTimeMinutes = 1440;
