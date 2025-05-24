@@ -2,60 +2,89 @@ const { SecretsManager, createGist } = require("@chainlink/functions-toolkit");
 const ethers = require("ethers");
 require("dotenv").config();
 
-const makeRequestSepolia = async () => {
+/**
+ * Retrieve an environment variable or throw an error if it’s missing.
+ * This function ensures critical configuration values are always available.
+ */
+function getEnvVar(key) {
+  const value = process.env[key];
+  if (!value) {
+    throw new Error(`${key} not provided - check your environment variables`);
+  }
+  return value;
+}
 
-  const secrets = { apikey: process.env.SUPABASE_API_KEY };
-
-  // hardcoded for Ethereum Sepolia
-  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
-  const linkTokenAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789";
-  const donId = "fun-ethereum-sepolia-1";
-  const rpcUrl = process.env.SEPOLIA_RPC_URL;
-  // Initialize ethers signer and provider to interact with the contracts onchain
-  const privateKey = process.env.EVM_PRIVATE_KEY;
-  if (!privateKey)
-    throw new Error(
-      "private key not provided - check your environment variables"
-    );
-
+/**
+ * Initializes an Ethereum signer using the given private key and RPC URL.
+ * This signer will be used to sign and send transactions on-chain securely.
+ */
+function initializeSigner(privateKey, rpcUrl) {
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-  const signer = new ethers.Wallet(privateKey, provider);
-  //////// MAKE REQUEST ////////
+  return new ethers.Wallet(privateKey, provider);
+}
 
-  console.log("\nMake request...");
+/**
+ * Handles the encryption of secrets and uploads them as a GitHub Gist.
+ * Returns encrypted URLs that can be referenced later in the DON.
+ */
+async function uploadSecretsToGist(signer, secrets) {
+  const routerAddress = "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0";
+  const donId = "fun-ethereum-sepolia-1";
 
-  // First encrypt secrets and create a gist
+  // SecretsManager provides functionality for encrypting secrets and working with Chainlink DON.
   const secretsManager = new SecretsManager({
-    signer: signer,
+    signer,
     functionsRouterAddress: routerAddress,
-    donId: donId,
+    donId,
   });
+
+  // Initialize the secrets manager before any operations. This may load config or contracts.
   await secretsManager.initialize();
 
-  // Encrypt secrets
+  // Encrypt secrets locally. This ensures they are secure before any upload.
   const encryptedSecretsObj = await secretsManager.encryptSecrets(secrets);
 
   console.log(`Creating gist...`);
-  const githubApiToken = process.env.GITHUB_API_TOKEN;
-  if (!githubApiToken)
-    throw new Error(
-      "githubApiToken not provided - check your environment variables"
-    );
 
-  // Create a new GitHub Gist to store the encrypted secrets
-  const gistURL = await createGist(
-    githubApiToken,
-    JSON.stringify(encryptedSecretsObj)
-  );
-  console.log(`\n✅Gist created ${gistURL} . Encrypt the URLs..`);
-  const encryptedSecretsUrls = await secretsManager.encryptSecretsUrls([
-    gistURL,
-  ]);
+  // Get the GitHub token from environment to create a Gist.
+  const githubApiToken = getEnvVar("GITHUB_API_TOKEN");
 
-  console.log(`\n✅Secrets encrypted. URLs: ${encryptedSecretsUrls}`);
-};
+  // Create a new GitHub Gist that stores the encrypted secrets JSON string.
+  const gistURL = await createGist(githubApiToken, JSON.stringify(encryptedSecretsObj));
+  console.log(`\n✅ Gist created at ${gistURL}. Encrypting the URLs...`);
 
-makeRequestSepolia().catch((e) => {
-  console.error(e);
+  // Encrypt the Gist URL so it can be securely used by Chainlink Functions.
+  const encryptedSecretsUrls = await secretsManager.encryptSecretsUrls([gistURL]);
+
+  console.log(`\n✅ Secrets URLs encrypted successfully: ${encryptedSecretsUrls}`);
+
+  return encryptedSecretsUrls;
+}
+
+/**
+ * Main function to run the secret upload logic on Sepolia testnet.
+ * It prepares the signer, secrets, and performs encryption and upload.
+ */
+async function makeRequestSepolia() {
+  console.log("\n🔐 Starting secrets upload process...");
+
+  // Retrieve critical environment variables to set up signer and secrets.
+  const rpcUrl = getEnvVar("SEPOLIA_RPC_URL");
+  const privateKey = getEnvVar("EVM_PRIVATE_KEY");
+  const supabaseApiKey = getEnvVar("SUPABASE_API_KEY");
+
+  // Construct the secrets object to be encrypted and uploaded.
+  const secrets = { apikey: supabaseApiKey };
+
+  // Create a signer for the Sepolia Ethereum testnet using the given private key.
+  const signer = initializeSigner(privateKey, rpcUrl);
+
+  // Encrypt secrets and upload them to a GitHub Gist, then encrypt the URLs for DON usage.
+  await uploadSecretsToGist(signer, secrets);
+}
+
+// Execute the main request and handle any errors gracefully.
+makeRequestSepolia().catch((error) => {
+  console.error("❌ Error:", error.message);
   process.exit(1);
 });
