@@ -3,7 +3,7 @@ dist
 !character.ts
 node_modules
 dist/
-
+.env
 db.sqlite
 *sqlite
 .idea

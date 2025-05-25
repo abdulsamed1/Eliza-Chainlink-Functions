@@ -11,7 +11,7 @@ export interface GiftContractConfig {
 }
 
 export class GiftContractConfigFactory {
-    static createAvalancheFujiConfig(): GiftContractConfig {
+    static createSepoliaConfig(): GiftContractConfig {
         const contractAddress: `0x${string}` = "0x00"; // TODO: Set actual contract address
         const donHostedSecretsSlotID = Infinity; // TODO: Set actual slot ID
         const donHostedSecretsVersion = Infinity; // TODO: Set actual version

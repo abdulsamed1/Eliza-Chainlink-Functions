@@ -21,7 +21,7 @@ export class GiftRequestOrchestrator {
 export class GiftRequestOrchestratorFactory {
     static async create(runtime: IAgentRuntime): Promise<GiftRequestOrchestrator> {
         const walletProvider = await initWalletProvider(runtime);
-        const config = GiftContractConfigFactory.createAvalancheFujiConfig();
+        const config = GiftContractConfigFactory.createSepoliaConfig();
         
         ConfigValidator.validateConfig(config);
         
