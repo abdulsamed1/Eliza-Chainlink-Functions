@@ -12,17 +12,17 @@ export interface GiftContractConfig {
 
 export class GiftContractConfigFactory {
     static createSepoliaConfig(): GiftContractConfig {
-        const contractAddress: `0x${string}` = "0x00"; // TODO: Set actual contract address
-        const donHostedSecretsSlotID = Infinity; // TODO: Set actual slot ID
-        const donHostedSecretsVersion = Infinity; // TODO: Set actual version
-        const subscriptionId = Infinity; // TODO: Set actual subscription ID
-        
+        const contractAddress: `0x${string}` = "0x29EeD516E36f1b71D2a176C64bA0A287e2EaA3E0";
+        const donHostedSecretsSlotID = 0;
+        const donHostedSecretsVersion = 1748121443;
+        const subscriptionId = 4820;
+
         return {
             contractAddress,
             donHostedSecretsSlotID,
             donHostedSecretsVersion,
             subscriptionId,
-            chainName: "avalancheFuji"
+            chainName: "fun-ethereum-sepolia-1"
         };
     }
 }
@@ -30,19 +30,19 @@ export class GiftContractConfigFactory {
 export class ConfigValidator {
     static validateConfig(config: GiftContractConfig): void {
         const { contractAddress, donHostedSecretsSlotID, donHostedSecretsVersion, subscriptionId } = config;
-        
+
         if (contractAddress === "0x00") {
             throw new Error("Contract address is not configured");
         }
-        
+
         if (donHostedSecretsSlotID === Infinity) {
             throw new Error("DON hosted secrets slot ID is not configured");
         }
-        
+
         if (donHostedSecretsVersion === Infinity) {
             throw new Error("DON hosted secrets version is not configured");
         }
-        
+
         if (subscriptionId === Infinity) {
             throw new Error("Chainlink subscription ID is not configured");
         }
