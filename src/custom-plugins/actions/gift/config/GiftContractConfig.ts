@@ -22,7 +22,7 @@ export class GiftContractConfigFactory {
             donHostedSecretsSlotID,
             donHostedSecretsVersion,
             subscriptionId,
-            chainName: "fun-ethereum-sepolia-1"
+            chainName: "Sepolia",
         };
     }
 }
