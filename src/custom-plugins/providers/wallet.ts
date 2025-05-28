@@ -31,9 +31,9 @@ import type { SupportedChain } from "../types/index.ts";
 export class WalletProvider {
   private cache: NodeCache;
   private cacheKey: string = "evm/wallet";
-  private currentChain: SupportedChain = "mainnet";
+  private currentChain: SupportedChain = "sepolia";
   private CACHE_EXPIRY_SEC = 5;
-  chains: Record<string, Chain> = { mainnet: viemChains.mainnet };
+  chains: Record<string, Chain> = {};
   account: PrivateKeyAccount;
 
   constructor(
@@ -68,17 +68,22 @@ export class WalletProvider {
     chainName: SupportedChain
   ): PublicClient<HttpTransport, Chain, Account | undefined> {
     const transport = this.createHttpTransport(chainName);
-
+    if (!this.chains[chainName]) {
+      throw new Error(`Chain ${chainName} is not supported`);
+    }
     const publicClient = createPublicClient({
       chain: this.chains[chainName],
       transport,
     });
+
     return publicClient;
   }
 
   getWalletClient(chainName: SupportedChain): WalletClient {
     const transport = this.createHttpTransport(chainName);
-
+    if (!this.chains[chainName]) {
+      throw new Error(`Chain ${chainName} is not supported`);
+    }
     const walletClient = createWalletClient({
       chain: this.chains[chainName],
       transport,
@@ -90,7 +95,9 @@ export class WalletProvider {
 
   getChainConfigs(chainName: SupportedChain): Chain {
     const chain = viemChains[chainName];
-
+    if (!this.chains[chainName]) {
+      throw new Error(`Chain ${chainName} is not supported`);
+    }
     if (!chain?.id) {
       throw new Error("Invalid chain name");
     }
@@ -264,8 +271,8 @@ const genChainsFromRuntime = (
 
   const mainnet_rpcurl = runtime.getSetting("EVM_PROVIDER_URL");
   if (mainnet_rpcurl) {
-    const chain = WalletProvider.genChainFromName("mainnet", mainnet_rpcurl);
-    chains["mainnet"] = chain;
+    const chain = WalletProvider.genChainFromName("sepolia", mainnet_rpcurl);
+    chains["sepolia"] = chain;
   }
 
   return chains;

@@ -21,7 +21,7 @@ export class ResponseHandler {
                 hash: transaction.hash,
                 amount: formatEther(transaction.value),
                 recipient: transaction.to,
-                chain: "Sepolia",
+                chain: "sepolia",
             },
         });
     }

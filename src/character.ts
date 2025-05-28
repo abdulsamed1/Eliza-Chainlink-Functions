@@ -18,7 +18,7 @@ export const character: Character = {
       model: "en_US-hfc_female-medium",
     },
     chains: {
-      evm: ["Sepolia"],
+      evm: ["sepolia"],
     },
   },
 };
