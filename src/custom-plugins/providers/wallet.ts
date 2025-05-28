@@ -1,4 +1,9 @@
-import { createPublicClient, createWalletClient, formatUnits, http } from "viem";
+import {
+  createPublicClient,
+  createWalletClient,
+  formatUnits,
+  http,
+} from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import {
   type IAgentRuntime,
@@ -8,7 +13,15 @@ import {
   type ICacheManager,
   elizaLogger,
 } from "@elizaos/core";
-import type { Address, WalletClient, PublicClient, Chain, HttpTransport, Account, PrivateKeyAccount } from "viem";
+import type {
+  Address,
+  WalletClient,
+  PublicClient,
+  Chain,
+  HttpTransport,
+  Account,
+  PrivateKeyAccount,
+} from "viem";
 import * as viemChains from "viem/chains";
 import NodeCache from "node-cache";
 import * as path from "path";
@@ -51,7 +64,9 @@ export class WalletProvider {
     return this.chains[this.currentChain];
   }
 
-  getPublicClient(chainName: SupportedChain): PublicClient<HttpTransport, Chain, Account | undefined> {
+  getPublicClient(
+    chainName: SupportedChain
+  ): PublicClient<HttpTransport, Chain, Account | undefined> {
     const transport = this.createHttpTransport(chainName);
 
     const publicClient = createPublicClient({
@@ -87,7 +102,9 @@ export class WalletProvider {
     const cacheKey = "walletBalance_" + this.currentChain;
     const cachedData = await this.getCachedData<string>(cacheKey);
     if (cachedData) {
-      elizaLogger.log("Returning cached wallet balance for chain: " + this.currentChain);
+      elizaLogger.log(
+        "Returning cached wallet balance for chain: " + this.currentChain
+      );
       return cachedData;
     }
 
@@ -106,7 +123,9 @@ export class WalletProvider {
     }
   }
 
-  async getWalletBalanceForChain(chainName: SupportedChain): Promise<string | null> {
+  async getWalletBalanceForChain(
+    chainName: SupportedChain
+  ): Promise<string | null> {
     try {
       const client = this.getPublicClient(chainName);
       const balance = await client.getBalance({
@@ -132,7 +151,9 @@ export class WalletProvider {
   }
 
   private async readFromCache<T>(key: string): Promise<T | null> {
-    const cached = await this.cacheManager.get<T>(path.join(this.cacheKey, key));
+    const cached = await this.cacheManager.get<T>(
+      path.join(this.cacheKey, key)
+    );
     return cached ?? null;
   }
 
@@ -168,7 +189,9 @@ export class WalletProvider {
     await this.writeToCache(cacheKey, data);
   }
 
-  private setAccount = (accountOrPrivateKey: PrivateKeyAccount | `0x${string}`) => {
+  private setAccount = (
+    accountOrPrivateKey: PrivateKeyAccount | `0x${string}`
+  ) => {
     if (typeof accountOrPrivateKey === "string") {
       this.account = privateKeyToAccount(accountOrPrivateKey);
     } else {
@@ -198,7 +221,10 @@ export class WalletProvider {
     return http(chain.rpcUrls.default.http[0]);
   };
 
-  static genChainFromName(chainName: string, customRpcUrl?: string | null): Chain {
+  static genChainFromName(
+    chainName: string,
+    customRpcUrl?: string | null
+  ): Chain {
     const baseChain = viemChains[chainName];
 
     if (!baseChain?.id) {
@@ -221,12 +247,17 @@ export class WalletProvider {
   }
 }
 
-const genChainsFromRuntime = (runtime: IAgentRuntime): Record<string, Chain> => {
-  const chainNames = (runtime.character.settings?.chains?.evm as SupportedChain[]) || [];
+const genChainsFromRuntime = (
+  runtime: IAgentRuntime
+): Record<string, Chain> => {
+  const chainNames =
+    (runtime.character.settings?.chains?.evm as SupportedChain[]) || [];
   const chains = {};
 
-  chainNames.forEach(chainName => {
-    const rpcUrl = runtime.getSetting("ETHEREUM_PROVIDER_" + chainName.toUpperCase());
+  chainNames.forEach((chainName) => {
+    const rpcUrl = runtime.getSetting(
+      "ETHEREUM_PROVIDER_" + chainName.toUpperCase()
+    );
     const chain = WalletProvider.genChainFromName(chainName, rpcUrl);
     chains[chainName] = chain;
   });
@@ -256,7 +287,11 @@ export const initWalletProvider = async (runtime: IAgentRuntime) => {
 };
 
 export const evmWalletProvider: Provider = {
-  async get(runtime: IAgentRuntime, _message: Memory, state?: State): Promise<string | null> {
+  async get(
+    runtime: IAgentRuntime,
+    _message: Memory,
+    state?: State
+  ): Promise<string | null> {
     try {
       const walletProvider = await initWalletProvider(runtime);
       const address = walletProvider.getAddress();
