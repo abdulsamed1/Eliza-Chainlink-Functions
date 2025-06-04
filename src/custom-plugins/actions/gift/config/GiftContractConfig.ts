@@ -14,7 +14,7 @@ export class GiftContractConfigFactory {
     static createSepoliaConfig(): GiftContractConfig {
         const contractAddress: `0x${string}` = "0x29EeD516E36f1b71D2a176C64bA0A287e2EaA3E0";
         const donHostedSecretsSlotID = 0;
-        const donHostedSecretsVersion = 1748121443;
+        const donHostedSecretsVersion = 1748556695;
         const subscriptionId = 4820;
 
         return {

@@ -2,8 +2,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const supabaseUrl = "https://flofeywjrxcklrizkgdg.supabase.co"; // dev TODO
-
+const supabaseUrl = "https://flofeywjrxcklrizkgdg.supabase.co";
 // fetch from supabase API and pass API Key as header
 const response = await fetch(
   `${supabaseUrl}/rest/v1/Gifts?select=gift_name,gift_code`,
