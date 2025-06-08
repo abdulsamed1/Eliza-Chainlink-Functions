@@ -2,6 +2,9 @@
  * @fileoverview Configuration interfaces and factories for gift contract interactions
  */
 
+// Add process import to access environment variables
+import process from 'process';
+
 export interface GiftContractConfig {
     readonly contractAddress: `0x${string}`;
     readonly donHostedSecretsSlotID: number;
@@ -14,8 +17,8 @@ export class GiftContractConfigFactory {
     static createSepoliaConfig(): GiftContractConfig {
         const contractAddress: `0x${string}` = "0x29EeD516E36f1b71D2a176C64bA0A287e2EaA3E0";
         const donHostedSecretsSlotID = 0;
-        const donHostedSecretsVersion = 1748556695;
-        const subscriptionId = 4820;
+        const donHostedSecretsVersion = Number(process.env.DON_HOSTED_SECRETS_VERSION) || Infinity;
+        const subscriptionId = Number(process.env.SUBSCRIPTION_ID) || Infinity;
 
         return {
             contractAddress,
@@ -26,6 +29,8 @@ export class GiftContractConfigFactory {
         };
     }
 }
+
+
 
 export class ConfigValidator {
     static validateConfig(config: GiftContractConfig): void {
