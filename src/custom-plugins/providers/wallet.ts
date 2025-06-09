@@ -1,30 +1,30 @@
 import {
+  type IAgentRuntime,
+  type ICacheManager,
+  type Memory,
+  type Provider,
+  type State,
+  elizaLogger,
+} from "@elizaos/core";
+import NodeCache from "node-cache";
+import * as path from "path";
+import type {
+  Account,
+  Address,
+  Chain,
+  HttpTransport,
+  PrivateKeyAccount,
+  PublicClient,
+  WalletClient,
+} from "viem";
+import {
   createPublicClient,
   createWalletClient,
   formatUnits,
   http,
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
-import {
-  type IAgentRuntime,
-  type Provider,
-  type Memory,
-  type State,
-  type ICacheManager,
-  elizaLogger,
-} from "@elizaos/core";
-import type {
-  Address,
-  WalletClient,
-  PublicClient,
-  Chain,
-  HttpTransport,
-  Account,
-  PrivateKeyAccount,
-} from "viem";
 import * as viemChains from "viem/chains";
-import NodeCache from "node-cache";
-import * as path from "path";
 
 import type { SupportedChain } from "../types/index.ts";
 
@@ -263,16 +263,19 @@ const genChainsFromRuntime = (
 
   chainNames.forEach((chainName) => {
     const rpcUrl = runtime.getSetting(
-      "ETHEREUM_PROVIDER_" + chainName.toUpperCase()
+      chainName.toUpperCase() + "_RPC_URL"
     );
     const chain = WalletProvider.genChainFromName(chainName, rpcUrl);
     chains[chainName] = chain;
   });
 
-  const mainnet_rpcurl = runtime.getSetting("EVM_PROVIDER_URL");
-  if (mainnet_rpcurl) {
-    const chain = WalletProvider.genChainFromName("sepolia", mainnet_rpcurl);
-    chains["sepolia"] = chain;
+  // Ensure Sepolia RPC URL is set
+  if (!chains["sepolia"]) {
+    const sepoliaRpcUrl = runtime.getSetting("SEPOLIA_RPC_URL");
+    if (sepoliaRpcUrl) {
+      const chain = WalletProvider.genChainFromName("sepolia", sepoliaRpcUrl);
+      chains["sepolia"] = chain;
+    }
   }
 
   return chains;
