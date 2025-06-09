@@ -103,7 +103,7 @@ const makeRequestSepolia = async () => {
   // Step 2: Chainlink Functions and network configuration
   const config = {
     routerAddress: "0xb83E47C2bC239B3bf370bc41e1459A34b41238D0", // Sepolia Functions Router
-    linkTokenAddress: "0x779877A7B0D9E8603169DdbD7836e478b4624789",
+    linkTokenAddress: "0x779877a7b0d9e8603169ddbd7836e478b4624789",
     donId: "fun-ethereum-sepolia-1",
     gatewayUrls: [
       "https://01.functions-gateway.testnet.chain.link/",
