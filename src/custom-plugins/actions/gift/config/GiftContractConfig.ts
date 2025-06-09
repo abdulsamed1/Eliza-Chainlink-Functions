@@ -15,7 +15,7 @@ export interface GiftContractConfig {
 
 export class GiftContractConfigFactory {
     static createSepoliaConfig(): GiftContractConfig {
-        const contractAddress: `0x${string}` = process.env.CONTRACT_ADDRESS as `0x${string}` || "0x29EeD516E36f1b71D2a176C64bA0A287e2EaA3E0";
+        const contractAddress: `0x${string}` = process.env.CONTRACT_ADDRESS as `0x${string}` || "0x6875E16ccE80CC7Ff2a75792a2B0B93ffa16269f";
         const donHostedSecretsSlotID = 0; // This is fixed as per the contract call
         
         // Parse version and subscription ID with validation

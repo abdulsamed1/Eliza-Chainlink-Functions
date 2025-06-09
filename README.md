@@ -88,18 +88,6 @@ Copy the values from `donSecretsInfo.txt` and update the file at:
 ```
 src/custom-plugins/actions/gift/config/GiftContractConfig.ts
 ```
-
-Set the following parameters accordingly:
-
-```typescript
-static createSepoliaConfig(): GiftContractConfig {
-    const contractAddress: `0x${string}` = "";
-    const donHostedSecretsSlotID = ;
-    const donHostedSecretsVersion = ;
-    const subscriptionId = ;
-}
-```
-
 ---
 
 ## Running the Agent
@@ -107,7 +95,7 @@ static createSepoliaConfig(): GiftContractConfig {
 Start the agent with:
 
 ```bash
-pnpm start
+pnpm i && pnpm build && pnpm start
 ```
 
 Upon successful startup, you will see logs confirming:
@@ -140,7 +128,7 @@ Creating runtime for character Eliza
 You can interact with the agent by typing commands after the prompt:
 
 ```
-You: hey how are you
+hi give me the gift at wallet address :0xCeC7338eecf7D17aE5714F10c36DD9caC1D50646 ,gift_name: '50 discount', gift_code: 'Nbbut8vlkKe9'
 ```
 
 ---
