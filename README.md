@@ -134,8 +134,12 @@ hi give me the gift at wallet address :0xCeC7338eecf7D17aE5714F10c36DD9caC1D5064
 ---
 # Result
 
+
+- The AI agent will process the request and return the message and transaction hash. You will the see the info below:
+```
 Agent: Ah, the 50 discount saga continues with unwavering determination. Let's consult the cosmic gift registry once more to see if this code finally grants you the thrifty victory you've been chasing across the cosmos.
 Agent: Gift request successful! Code: Nbbut8vlkKe9, Address: 0xCeC7338eecf7D17aE5714F10c36DD9caC1D50646
 Transaction Hash: 0x2c8700e9a191207b01fb579b454ea3ede7b857bc4243f88f99da15115066cdc8
-You: 
+```
 
+ ### Looking here  [EthScan](https://sepolia.etherscan.io/tx/0x2c8700e9a191207b01fb579b454ea3ede7b857bc4243f88f99da15115066cdc8)
