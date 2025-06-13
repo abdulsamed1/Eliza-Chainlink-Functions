@@ -10,7 +10,7 @@ export const character: Character = {
   ...defaultCharacter,
   // name: "Eliza",
   plugins: [getGiftPlugin],
-  clients: [],
+  clients: [Clients.TWITTER],
   modelProvider: ModelProviderName.OPENROUTER,
   settings: {
     secrets: {},
